@@ -11,10 +11,10 @@ const puppeteer = require('puppeteer');
     await page.goto(mainConfig.targetURL);
     // Catch log
     page.on('console', msg => console.log('[Log]: ', msg.text()));
-    for (let step of mainConfig.step) {
+    for (let step of mainConfig.pipelines) {
         console.log(`[Step]: ${step.name} start.`);
         try {
-            const runner = __non_webpack_require__(`${root}/src/step${step.path}`);
+            const runner = __non_webpack_require__(`${root}/src${step.path}`);
             await runner({ page });
             console.log(`[Step]: ${step.name} done.`);
         } catch (e) {
