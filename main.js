@@ -26,13 +26,14 @@ const puppeteer = require("puppeteer");
             console.log(`[Step]: ${step.name} done.`);
         } catch (e) {
             console.log(`[Error]: ${step.name} - ${e}`);
-            if (retryCount < step.retry) {
+            if (retryCount < mainConfig.retry) {
+                console.log(`[Step]: ${step.name} retry.`);
                 retryCount++;
-                run(step);
+                await run(step);
             }
         }
     };
-    for (let step of mainConfig.pipelines) {
+    for (const step of mainConfig.pipelines) {
         console.log(`[Step]: ${step.name} start.`);
         await run(step);
     }
