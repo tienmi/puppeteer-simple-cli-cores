@@ -1,6 +1,6 @@
 {
     "name": "puppeteer-simple-cli-cores",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "main": "./core.bundle.js",
     "author": "tienmi",
     "license": "MIT",

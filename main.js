@@ -1,8 +1,9 @@
 const path = require("path");
 const puppeteer = require("puppeteer");
+const chalk = require("chalk");
 
 (async () => {
-    console.log("[Initialzation]: Preparing");
+    console.log(`${chalk.bgMagenta("[Initialzation] Preparing")}`);
     let first = true;
     let retryCount = 0;
     const root = path.resolve("", "./");
@@ -23,19 +24,31 @@ const puppeteer = require("puppeteer");
             first = false;
             const runner = __non_webpack_require__(`${root}/src${step.path}`);
             await runner({ page });
-            console.log(`[Step]: ${step.name} done.`);
+            console.log(
+                `${chalk.bgGreen("[Step]")} ${step.name} ${chalk.green(
+                    "done."
+                )}`
+            );
         } catch (e) {
-            console.log(`[Error]: ${step.name} - ${e}`);
+            console.log(
+                `${chalk.bgRed("[Error]")} ${step.name} - ${chalk.red(e)}`
+            );
             if (retryCount < mainConfig.retry) {
-                console.log(`[Step]: ${step.name} retry.`);
+                console.log(
+                    `${chalk.bgGreen("[Step]")} ${step.name} ${chalk.blue(
+                        "retry."
+                    )}`
+                );
                 retryCount++;
                 await run(step);
             }
         }
     };
     for (const step of mainConfig.pipelines) {
-        console.log(`[Step]: ${step.name} start.`);
+        console.log(
+            `${chalk.bgGreen("[Step]")} ${step.name} ${chalk.blue("start.")}`
+        );
         await run(step);
     }
-    console.log("[End]");
+    console.log(chalk.bgMagenta("[End]"));
 })();
