@@ -1,9 +1,8 @@
 const path = require("path");
 const puppeteer = require("puppeteer");
-const chalk = require("chalk");
 
 (async () => {
-    console.log(`${chalk.bgMagenta("[Initialzation] Preparing")}`);
+    console.log("\x1b[45m", "[Initialzation] Preparing", "\x1b[0m");
     let first = true;
     let retryCount = 0;
     const root = path.resolve("", "./");
@@ -25,19 +24,33 @@ const chalk = require("chalk");
             const runner = __non_webpack_require__(`${root}/src${step.path}`);
             await runner({ page });
             console.log(
-                `${chalk.bgGreen("[Step]")} ${step.name} ${chalk.green(
-                    "done."
-                )}`
+                "\x1b[42m",
+                "[Step]",
+                "\x1b[0m",
+                step.name,
+                "\x1b[32m",
+                "done.",
+                "\x1b[0m"
             );
         } catch (e) {
             console.log(
-                `${chalk.bgRed("[Error]")} ${step.name} - ${chalk.red(e)}`
+                "\x1b[41m",
+                "[Error]",
+                "\x1b[0m",
+                step.name,
+                "\x1b[31m",
+                e,
+                "\x1b[0m"
             );
             if (retryCount < mainConfig.retry) {
                 console.log(
-                    `${chalk.bgGreen("[Step]")} ${step.name} ${chalk.blue(
-                        "retry."
-                    )}`
+                    "\x1b[44m",
+                    "[Step]",
+                    "\x1b[0m",
+                    step.name,
+                    "\x1b[34m",
+                    "retry.",
+                    "\x1b[0m"
                 );
                 retryCount++;
                 await run(step);
@@ -46,9 +59,15 @@ const chalk = require("chalk");
     };
     for (const step of mainConfig.pipelines) {
         console.log(
-            `${chalk.bgGreen("[Step]")} ${step.name} ${chalk.blue("start.")}`
+            "\x1b[44m",
+            "[Step]",
+            "\x1b[0m",
+            step.name,
+            "\x1b[34m",
+            "start.",
+            "\x1b[0m"
         );
         await run(step);
     }
-    console.log(chalk.bgMagenta("[End]"));
+    console.log("\x1b[45m", "[End]", "\x1b[0m");
 })();
