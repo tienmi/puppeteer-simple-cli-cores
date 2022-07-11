@@ -1,28 +1,27 @@
-const path = require("path");
 const puppeteer = require("puppeteer");
+const path = require("path");
+const root = path.resolve("", "./");
+
+const context = {
+    page: null,
+};
+module.exports = context;
 
 (async () => {
     console.log("\x1b[45m", "[Initialzation] Preparing", "\x1b[0m");
-    let first = true;
     let retryCount = 0;
-    const root = path.resolve("", "./");
     const mainConfig = __non_webpack_require__(`${root}/src/main.config.js`);
     const config = mainConfig.config || { headless: false, slowMo: 50 };
     const browser = await puppeteer.launch(config);
     let page = await browser.newPage();
+    context.page = page;
     await page.goto(mainConfig.targetURL);
     // Catch log
     page.on("console", (msg) => console.log("[Log]: ", msg.text()));
-    const run = async (step) => {
+    const runStep = async (step) => {
         try {
-            if (!first && step.reload) {
-                await page.close();
-                page = await browser.newPage();
-                await page.goto(mainConfig.targetURL);
-            }
-            first = false;
             const runner = __non_webpack_require__(`${root}/src${step.path}`);
-            await runner({ page });
+            await runner();
             console.log(
                 "\x1b[42m",
                 "[Step]",
@@ -53,21 +52,26 @@ const puppeteer = require("puppeteer");
                     "\x1b[0m"
                 );
                 retryCount++;
-                await run(step);
+                await page.goto(mainConfig.targetURL);
+                await page.waitForNavigation();
+                await runPipelines();
             }
         }
     };
-    for (const step of mainConfig.pipelines) {
-        console.log(
-            "\x1b[44m",
-            "[Step]",
-            "\x1b[0m",
-            step.name,
-            "\x1b[34m",
-            "start.",
-            "\x1b[0m"
-        );
-        await run(step);
-    }
+    const runPipelines = async () => {
+        for (const step of mainConfig.pipelines) {
+            console.log(
+                "\x1b[44m",
+                "[Step]",
+                "\x1b[0m",
+                step.name,
+                "\x1b[34m",
+                "start.",
+                "\x1b[0m"
+            );
+            await runStep(step);
+        }
+    };
+    await runPipelines();
     console.log("\x1b[45m", "[End]", "\x1b[0m");
 })();
