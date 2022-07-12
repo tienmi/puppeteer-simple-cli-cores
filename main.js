@@ -17,7 +17,9 @@ module.exports = context;
     context.page = page;
     await page.goto(mainConfig.targetURL);
     // Catch log
-    page.on("console", (msg) => console.log("[Log]: ", msg.text()));
+    if (mainConfig.getClientLog) {
+        page.on("console", (msg) => console.log("[Log]: ", msg.text()));
+    }
     const runStep = async (step) => {
         try {
             const runner = __non_webpack_require__(`${root}/src${step.path}`);
@@ -52,8 +54,9 @@ module.exports = context;
                     "\x1b[0m"
                 );
                 retryCount++;
+                const navigationPromise = page.waitForNavigation();
                 await page.goto(mainConfig.targetURL);
-                await page.waitForNavigation();
+                await navigationPromise;
                 await runPipelines();
             }
         }
