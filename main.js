@@ -26,7 +26,7 @@ module.exports = context;
                 "\x1b[42m",
                 "[Step]",
                 "\x1b[0m",
-                step.name,
+                step.title,
                 "\x1b[32m",
                 "done.",
                 "\x1b[0m"
@@ -36,7 +36,7 @@ module.exports = context;
                 "\x1b[41m",
                 "[Error]",
                 "\x1b[0m",
-                step.name,
+                step.title,
                 "\x1b[31m",
                 e,
                 "\x1b[0m"
@@ -46,7 +46,7 @@ module.exports = context;
                     "\x1b[44m",
                     "[Step]",
                     "\x1b[0m",
-                    step.name,
+                    step.title,
                     "\x1b[34m",
                     "retry.",
                     "\x1b[0m"
@@ -64,7 +64,7 @@ module.exports = context;
                 "\x1b[44m",
                 "[Step]",
                 "\x1b[0m",
-                step.name,
+                step.title,
                 "\x1b[34m",
                 "start.",
                 "\x1b[0m"

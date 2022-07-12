@@ -1,6 +1,6 @@
 {
     "name": "puppeteer-simple-cli-cores",
-    "version": "1.0.22",
+    "version": "1.0.23",
     "main": "./core.bundle.js",
     "author": "tienmi",
     "license": "MIT",
@@ -15,7 +15,7 @@
         "simple e2e"
     ],
     "bin": {
-        "psc": "./bin/psc.js"
+        "psc-run": "./bin/pscRun.js"
     },
     "dependencies": {
         "puppeteer": "^14.4.1",
