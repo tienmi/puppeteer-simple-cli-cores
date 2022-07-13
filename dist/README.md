@@ -12,21 +12,20 @@ npm i puppeteer-simple-cli-cores
 
 #### Basic usage
 
-create src/main.config.js and addition config
+##### Create src/main.config.js and addition config
 
 ```
 module.exports = {
     targetURL: '', // It's your target URL
-    pipelines: [
+    pipelines: [ // Execute your situation in order
         {
-            name: 'stepName',
-            path: 'your script path',
-            retry: 0, // number of retries
-            reload: false // true is page reload
+            title: 'Situation description',
+            path: 'Your script path'
         }
     ],
-    config: { headless: false, slowMo: 50, defaultViewport: null },
-    retry: 1
+    config: { headless: false, slowMo: 50, defaultViewport: null }, // Puppeteer config
+    retry: 1,  // Number of retries
+    getClientLog: false // Whether to accept client log
 };
 ```
 
