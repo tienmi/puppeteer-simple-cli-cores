@@ -50,7 +50,7 @@ module.exports = context;
                 const navigationPromise = page.waitForNavigation();
                 await page.goto(mainConfig.targetURL);
                 await navigationPromise;
-                await runPipelines();
+                await runStep(step);
             }
         }
     };
