@@ -13,6 +13,7 @@
         "webpack-node-externals": "^3.0.0"
     },
     "dependencies": {
+        "promise": "^8.1.0",
         "puppeteer": "^14.4.1",
         "shelljs": "^0.8.5"
     }
