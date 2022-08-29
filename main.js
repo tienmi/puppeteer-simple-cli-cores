@@ -1,23 +1,13 @@
 const puppeteer = require('puppeteer');
-const path = require('path');
-const root = path.resolve('', './');
-const mainConfig = __non_webpack_require__(`${root}/src/main.config.js`);
-const fs = require('fs');
+const mainConfig = __non_webpack_require__(`../../src/main.config.js`);
 
-const saveLog = [];
 const context = {
-    page: null,
-    async log(msg) {
-        if (!mainConfig.saveLog) return;
-        saveLog.push(msg);
-        await fs.promises.writeFile('log.json', JSON.stringify(saveLog));
-    }
+    page: null
 };
 module.exports = context;
 
 (async () => {
-    console.log('\x1b[45m', '[Initialzation] Preparing', '\x1b[0m');
-    context.log('Preparing...');
+    console.log('Preparing...');
     let retryCount = 0;
     const config = mainConfig.config || { headless: false, slowMo: 50 };
     const browser = await puppeteer.launch(config);
@@ -30,34 +20,15 @@ module.exports = context;
     }
 
     const runStep = async step => {
-        context.log(`Running step ${step.title}.`);
+        console.log(`Running step ${step.title}.`);
         try {
-            const runner = __non_webpack_require__(`${root}/src${step.path}`);
+            const runner = __non_webpack_require__(`../../src${step.path}`);
             await runner();
-            console.log(
-                '\x1b[42m',
-                '[Step]',
-                '\x1b[0m',
-                step.title,
-                '\x1b[32m',
-                'done.',
-                '\x1b[0m'
-            );
-            context.log(`Step ${step.title} success!`);
+            console.log(`Step ${step.title} success!`);
         } catch (e) {
-            console.log('\x1b[41m', '[Error]', '\x1b[0m', step.title, '\x1b[31m', e, '\x1b[0m');
-            context.log(`[Error] ${step.title} - ${e}`);
+            console.log(`[Error] ${step.title} - ${e}`);
             if (retryCount < mainConfig.retry) {
-                context.log(`Step ${step.title} retry.`);
-                console.log(
-                    '\x1b[44m',
-                    '[Step]',
-                    '\x1b[0m',
-                    step.title,
-                    '\x1b[34m',
-                    'retry.',
-                    '\x1b[0m'
-                );
+                console.log(`Step ${step.title} retry.`);
                 retryCount++;
                 const navigationPromise = page.waitForNavigation();
                 await page.goto(mainConfig.targetURL);
@@ -69,15 +40,6 @@ module.exports = context;
 
     const runPipelines = async () => {
         for (const step of mainConfig.pipelines) {
-            console.log(
-                '\x1b[44m',
-                '[Step]',
-                '\x1b[0m',
-                step.title,
-                '\x1b[34m',
-                'start.',
-                '\x1b[0m'
-            );
             const navigationPromise = page.waitForNavigation();
             await page.goto(mainConfig.targetURL);
             await navigationPromise;
@@ -86,7 +48,6 @@ module.exports = context;
     };
 
     await runPipelines();
-    context.log(`Job end!`);
-    console.log('\x1b[45m', '[End]', '\x1b[0m');
+    console.log(`Job end!`);
     browser.close();
 })();
