@@ -1,12 +1,13 @@
 const puppeteer = require('puppeteer');
 const mainConfig = __non_webpack_require__(`../../src/main.config.js`);
-
+const version = require('./dist/package.json').version;
 const context = {
     page: null
 };
 module.exports = context;
 
 (async () => {
+    console.log(`e2e version: ${mainConfig.version} | cores version: ${version}`);
     console.log('Preparing...');
     let retryCount = 0;
     const config = mainConfig.config || { headless: false, slowMo: 50 };
